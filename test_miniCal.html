@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Calculator </title>
+
+    <body>
+        <style>
+            body{
+                font-size: 16pt;
+                line-height: 2rem;
+            }
+            .content-container{
+                background-color: #FFCC8F;
+                width: 40%;
+                padding: 2rem;
+                position: absolute;
+                transform: translate(-50%, -50%);
+                top:50%;
+                left: 50%;
+            }
+            .content-container div{
+                background-color: #FFDAAF;
+                margin: 1rem;
+                padding: 0.5rem;
+            }
+            button{
+                font-size: 24pt;
+            }
+        </style>
+    </body>
+</head>
+<body>
+    <div class="content-container">
+        <div>
+            <label for="">a</label>
+            <input type="text" id="a" />
+        </div>
+        <div>
+            <label for="">b</label>
+            <input type="text" id="b" />
+        </div>
+        <div>
+            <button onclick="add()">+</button>
+            <button onclick="minus()">-</button>
+            <button onclick="mul()">*</button>
+            <button onclick="div()">/</button>
+        </div>
+        <div class="show-result" style="background-color: #A760FF; 
+        width: 50%; ">
+
+        </div>
+    </div>
+
+    <script>
+
+        const add =()=>{
+            const a_box = document.querySelector('#a');
+            const b_box = document.querySelector('#b');
+            const a = parseInt(a_box.value) ;
+            const b = parseInt(b_box.value);
+            const res_text = document.querySelector('.show-result');
+            if(isNaN(a) || isNaN(b))
+            {
+                alert("Please input a number");
+                return;
+            }
+            let c = a+b;
+            res_text.innerHTML = c;
+        }
+ 
+        const minus =()=>{
+            const a_box = document.querySelector('#a');
+            const b_box = document.querySelector('#b');
+            const a = parseInt(a_box.value) ;
+            const b = parseInt(b_box.value);
+            const res_text = document.querySelector('.show-result');
+            if(isNaN(a) || isNaN(b))
+            {
+                alert("Please input a number");
+                return;
+            }
+            let c = a-b;
+            //alert(`Value = ${c}`);
+            res_text.style.display = "block";
+            res_text.innerHTML = c;
+        }
+
+        const mul =()=>{
+            const a_box = document.querySelector('#a');
+            const b_box = document.querySelector('#b');
+            const a = parseInt(a_box.value) ;
+            const b = parseInt(b_box.value);
+            const res_text = document.querySelector('.show-result');
+            if(isNaN(a) || isNaN(b))
+            {
+                alert("Please input a number");
+                return;
+            }
+            let c = a*b;
+            // alert(`Value = ${c}`);
+            res_text.innerHTML = c;
+        }
+
+        const div =()=>{
+            const a_box = document.querySelector('#a');
+            const b_box = document.querySelector('#b');
+            const a = parseInt(a_box.value) ;
+            const b = parseInt(b_box.value);
+            const res_text = document.querySelector('.show-result');
+
+            if(isNaN(a) || isNaN(b))
+            {
+                res_text.innerHTML = "Please input a number";
+                return;
+            }
+            let c = a/b;
+            if(isNaN(c))
+            {
+                res_text.innerHTML = "denominator can't be zero";
+                return;
+            }
+            // alert(`Value = ${c.toFixed(3)}`);
+            res_text.innerHTML = c;
+        }
+    </script>
+</body>
+</html>
