@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCL Photo Hunt Game</title>
+    <style>
+        .box {
+            background-color: #EC994B;
+            font-size: 18pt;
+            margin: 5px;
+            padding: 5px;
+        }
+
+        .container {
+            background-color: #C74B50;
+            height: 100px;
+            width: 100px;
+            margin: 2px;
+            padding: 5px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .box1 {
+            background-color: #FF8C32;
+            height: 100px;
+            width: 100px;
+            display: inline-block;
+            position: absolute;
+        }
+
+        .box2 {
+            background-color: #712B75;
+            height: 100px;
+            width: 100px;
+            display: inline-block;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body onload="onload()">
+
+    <div class="main-container" id="main-container"> </div>
+
+    <script>
+        const onload = () => {
+            const main = document.querySelector('#main-container');
+            for(let i=0;i<36;i++)
+            {
+                main.innerHTML += createCard();
+            }
+
+        }
+
+        const createCard = () => {
+            let x = `
+                <div class="container">
+                    <div class="box1" id="orange" onclick="action('close','')">
+
+                    </div>
+                    <div class="box2" id="purple" onclick="action('open','')">
+
+                    </div>
+                </div>`;
+            return x;
+        }
+
+        //click orange to close
+        //click purple to open
+        const action = (what, who) => {
+            let purple = document.querySelector('#purple');
+            if (what === "open") {
+                //set height to 0px to open card
+                purple.style.transition = "height 0.44s"
+                purple.style.height = "0px";
+                play_OpenSound();
+            }
+            else if (what === "close") {
+                purple.style.transition = "height 0.44s"
+                purple.style.height = "100px";
+                play_CloseSound();
+            }
+        }
+        const play_OpenSound = () => {
+            const audio = new Audio('sound/open.wav');
+            audio.play();
+        }
+        const play_CloseSound = () => {
+            const audio = new Audio('sound/close.wav');
+            audio.play();
+        }
+    </script>
+</body>
+
+</html>
