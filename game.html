@@ -6,12 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UCL Photo Hunt Game</title>
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet">
+
     <style>
         .box {
-            background-color: #EC994B;
+            background-color: greenyellow;
             font-size: 18pt;
             margin: 5px;
             padding: 5px;
+        }
+
+        .main-container {
+            width: 100%;
+            height: 100%;
         }
 
         .container {
@@ -21,7 +31,7 @@
             margin: 2px;
             padding: 5px;
             display: inline-block;
-            position: relative;
+            /* position: relative; */
         }
 
         .box1 {
@@ -39,40 +49,88 @@
             display: inline-block;
             position: absolute;
         }
+
+        .box1,.box2:hover{
+            cursor: pointer;
+        }
+        /* test header */
+        .header>a>img:hover{
+            cursor: pointer;
+            scale: 0.5;
+        }
     </style>
 </head>
 
 <body onload="onload()">
-
+    <div class="header" style="text-align: center; margin-bottom:20px;">
+        <h1 style="font-family: 'Kdam Thmor Pro', sans-serif;">
+            UCL Photo Hunt 
+        </h1>
+        <a href="https://github.com/worachote1/PhotoHunt_Game_js" target="_blank">
+            <img src="img/github.png" alt="" width="60vw">
+        </a> 
+    </div>
+    
     <div class="main-container" id="main-container"> </div>
 
     <script>
-        const onload = () => {
-            const main = document.querySelector('#main-container');
-            for(let i=0;i<36;i++)
+
+        let img = Array();
+
+        //Shuffle random cards
+        let Shuffle =(imgArray)=>{
+            for(let i=0;i<imgArray.length;i++)
             {
-                main.innerHTML += createCard();
+                let r = Math.floor(Math.random()*(imgArray.length-i));
+                console.log("r = "+r);
+                let temp = imgArray[i];
+                imgArray[i]=imgArray[r];
+                imgArray[r]=temp;
+            }
+            return imgArray;
+        }
+
+        const onload = () => {
+            //push images to array
+            for (let i = 1; i <= 18; i++) {
+                img.push(`img/img-${i}.png`);
+                img.push(`img/img-${i}.png`);
+            }
+
+            //Shuffle(img);
+            
+            //shuffle of shulfle of shule of shule ......
+            for(let i=0;i<44;i++)
+            {
+                Shuffle(img);
+            }
+           //Draw cards in HTML
+            const main = document.querySelector('#main-container');
+            for (let i = 0; i < 36; i++) {
+                main.innerHTML += createCard(i, img[i]);
             }
 
         }
 
-        const createCard = () => {
+        //Draw cards
+        const createCard = (id, image) => {
             let x = `
                 <div class="container">
-                    <div class="box1" id="orange" onclick="action('close','')">
-
+                    <div class="box1" id="${id}_orange" onclick="action('close','${id}')">
+                        <img src="${image}" width:"10px" height:"10px">
                     </div>
-                    <div class="box2" id="purple" onclick="action('open','')">
-
+                    <div class="box2" id="${id}_purple" onclick="action('open','${id}')">
+                        
                     </div>
                 </div>`;
+            //  x = x.replaceAll("{{{i}}}", id);
             return x;
         }
 
         //click orange to close
         //click purple to open
         const action = (what, who) => {
-            let purple = document.querySelector('#purple');
+            let purple = document.getElementById(`${who}_purple`);
             if (what === "open") {
                 //set height to 0px to open card
                 purple.style.transition = "height 0.44s"
