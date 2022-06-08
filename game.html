@@ -50,42 +50,87 @@
             position: absolute;
         }
 
-        .box1,.box2:hover{
+        .box1,
+        .box2:hover {
             cursor: pointer;
         }
+
         /* test header */
-        .header>a>img:hover{
+        .header>a>img:hover {
             cursor: pointer;
             scale: 0.5;
+        }
+
+        /* click count css */
+        .click-count {
+            font-size: 25pt;
+            text-align: center;
+            background-color: #06113C;
+            color: #FF8C32;
+            width: 50%;
+
+            margin: auto;
         }
     </style>
 </head>
 
 <body onload="onload()">
-    <div class="header" style="text-align: center; margin-bottom:20px;">
+    <div class="header" style="position:relative ;text-align: center; margin-bottom:20px;">
         <h1 style="font-family: 'Kdam Thmor Pro', sans-serif;">
-            UCL Photo Hunt 
+            UCL Photo Hunt
         </h1>
         <a href="https://github.com/worachote1/PhotoHunt_Game_js" target="_blank">
             <img src="img/github.png" alt="" width="60vw">
-        </a> 
+        </a>
+        <div class="click-count" id="clickCount">
+            Click to search 2 logo in below
+        </div>
     </div>
-    
     <div class="main-container" id="main-container"> </div>
-
     <script>
+        //Class GameState
+        class GameState {
+            constructor() {
+                this.nowOpen = new Array();
+                this.open_count = 0;
+                this.click_count = 0;
+            }
+            open_new(id) {
+                this.nowOpen.push(id);
+                this.open_count++;
+                this.click_count++;
+                display_clickCount(this.click_count);
 
-        let img = Array();
+                //if player open 3 cards , then close all the cards
+                if(this.nowOpen.length === 3)
+                {
+                    //close that all 3 card
+                    while(this.nowOpen.length > 1){
+                        action('close',this.nowOpen[0]);
+                    }
+                }
+            }
+            close_one(id) {
+                const index = this.nowOpen.indexOf(id);
+                if (index != -1) {
+                    this.nowOpen.splice(index, 1);
+                }
+                this.open_count--;
+                display_clickCount(this.click_count);
+            }
+        }
 
+        const game = new GameState();
+        
+        const img = Array();
         //Shuffle random cards
-        let Shuffle =(imgArray)=>{
-            for(let i=0;i<imgArray.length;i++)
-            {
-                let r = Math.floor(Math.random()*(imgArray.length-i));
-                console.log("r = "+r);
+        const Shuffle = (imgArray) => {
+            for (let i = 0; i < imgArray.length; i++) {
+                let r = Math.floor(Math.random() * (imgArray.length - i));
+                console.log("r = " + r);
                 let temp = imgArray[i];
-                imgArray[i]=imgArray[r];
-                imgArray[r]=temp;
+                imgArray[i] = imgArray[r];
+                imgArray[r] = temp;
             }
             return imgArray;
         }
@@ -98,13 +143,12 @@
             }
 
             //Shuffle(img);
-            
+
             //shuffle of shulfle of shule of shule ......
-            for(let i=0;i<44;i++)
-            {
+            for (let i = 0; i < 44; i++) {
                 Shuffle(img);
             }
-           //Draw cards in HTML
+            //Draw cards in HTML
             const main = document.querySelector('#main-container');
             for (let i = 0; i < 36; i++) {
                 main.innerHTML += createCard(i, img[i]);
@@ -127,6 +171,10 @@
             return x;
         }
 
+        const display_clickCount = (count) => {
+            let count_text = document.getElementById('clickCount');
+            count_text.innerHTML = "" + count;
+        }
         //click orange to close
         //click purple to open
         const action = (what, who) => {
@@ -136,11 +184,13 @@
                 purple.style.transition = "height 0.44s"
                 purple.style.height = "0px";
                 play_OpenSound();
+                game.open_new(who);
             }
             else if (what === "close") {
                 purple.style.transition = "height 0.44s"
                 purple.style.height = "100px";
                 play_CloseSound();
+                game.close_one(who);
             }
         }
         const play_OpenSound = () => {
@@ -151,6 +201,7 @@
             const audio = new Audio('sound/close.wav');
             audio.play();
         }
+
     </script>
 </body>
 
