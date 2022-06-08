@@ -101,14 +101,32 @@
                 this.click_count++;
                 display_clickCount(this.click_count);
 
-                //if player open 3 cards , then close all the cards
+                //if player open 3 cards , then close the first 2 cards
                 if(this.nowOpen.length === 3)
                 {
-                    //close that all 3 card
+                    //close that first 2 cards
                     while(this.nowOpen.length > 1){
                         action('close',this.nowOpen[0]);
                     }
                 }
+
+                //end game
+                for(let i=0;i<this.nowOpen.length-1;i++)
+                {
+                    for(let j=i+1;j<this.nowOpen.length;j++){
+                        if(img[this.nowOpen[i]]===img[this.nowOpen[j]])
+                        {
+                        action('finish',this.nowOpen[i]);
+                        action('finish',this.nowOpen[j]);
+
+                        this.nowOpen.splice(j, 1);
+                        this.nowOpen.splice(i, 1);
+                        this.open_count -= 2;
+                        }
+                    }
+                }
+
+                //console.log("After this open,nowOpen.length = "+this.nowOpen.length);
             }
             close_one(id) {
                 const index = this.nowOpen.indexOf(id);
@@ -117,6 +135,7 @@
                 }
                 this.open_count--;
                 display_clickCount(this.click_count);
+                //console.log("After this close,nowOpen.length = "+this.nowOpen.length);
             }
         }
 
@@ -127,7 +146,7 @@
         const Shuffle = (imgArray) => {
             for (let i = 0; i < imgArray.length; i++) {
                 let r = Math.floor(Math.random() * (imgArray.length - i));
-                console.log("r = " + r);
+                //console.log("r = " + r);
                 let temp = imgArray[i];
                 imgArray[i] = imgArray[r];
                 imgArray[r] = temp;
@@ -144,7 +163,7 @@
 
             //Shuffle(img);
 
-            //shuffle of shulfle of shule of shule ......
+            //shuffle of shuffle of shuffle of shuffle ......
             for (let i = 0; i < 44; i++) {
                 Shuffle(img);
             }
@@ -191,6 +210,12 @@
                 purple.style.height = "100px";
                 play_CloseSound();
                 game.close_one(who);
+            }
+
+            //if 2 cards match each other , then those 2 cards never closed forver
+            else if(what === "finish"){
+                purple.style.height = "30px";
+                purple.style.visibility = "hidden";
             }
         }
         const play_OpenSound = () => {
